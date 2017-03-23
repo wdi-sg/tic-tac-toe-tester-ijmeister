@@ -55,6 +55,18 @@ function isEqualArrays (array1, array2) {
   return true
 }
 
+function arrayContainsArray (bigArray, smlArray) {
+  /**
+   * returns true if bigArray contains all elements in smlArray
+   */
+  for (var i = 0; i < smlArray.length; i++) {
+    if (!bigArray.includes(smlArray[ i ])) {
+      return false
+    }
+  }
+  return true
+}
+
 function restart () {
   // reset the grid to all zeros
   initiate()
@@ -134,20 +146,22 @@ function checkifPlayerWin (playerID) {
   if (isInWinningLogic(playerMovesArray)) {
     return true
   } else {
+    // Updated 24-Mar. This is no longer needed. Please see inWinningLogic
+    // function below
     // winning logic can occur in from turn 2 to turn 4 or turn 3 to turn 5
     // [5, 0, 1, 2]
     // [7. 8, 0, 1, 2]
-    if (playerMovesArray.length > 3) {
-      return isInWinningLogic(playerMovesArray.slice(1))
-    }
-    if (playerMovesArray.length > 4) {
-      return isInWinningLogic(playerMovesArray.slice(2))
-    }
+    // if (playerMovesArray.length > 3) {
+    //   return isInWinningLogic(playerMovesArray.slice(1))
+    // }
+    // if (playerMovesArray.length > 4) {
+    //   return isInWinningLogic(playerMovesArray.slice(2))
+    // }
     return false
   }
 }
 
-function isInWinningLogic (array1) {
+function isInWinningLogic_old (array1) {
   /**
    * compare player moves/index array with all the winning logics defined
    */
@@ -158,6 +172,26 @@ function isInWinningLogic (array1) {
       return true
     } else {
       // only return false after going through all winning logics
+      if (i === winningLogics.length - 1) {
+        return false
+      } else {
+        continue
+      }
+    }
+  }
+}
+
+function isInWinningLogic (array1) {
+  /**
+   * compare if winningLogic appears in the player moves array
+   */
+  for (var i = 0; i < winningLogics.length; i++) {
+    var wLogic = winningLogics[i]
+    if (arrayContainsArray(array1, wLogic)) {
+       // console.log("Matched with Winning Logic - " + i)
+      return true
+    } else {
+       // only return false after going through all winning logics
       if (i === winningLogics.length - 1) {
         return false
       } else {
